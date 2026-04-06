@@ -16,46 +16,65 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+
 package org.os890.template.jaxrs.test;
 
 import org.os890.template.jaxrs.DemoApplication;
 import org.apache.openejb.testing.Application;
-import org.apache.tomee.embedded.junit.TomEEEmbeddedSingleRunner;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.apache.tomee.embedded.junit.jupiter.RunWithTomEEEmbedded;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 
-import javax.ws.rs.ApplicationPath;
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.UriBuilder;
+import jakarta.ws.rs.ApplicationPath;
+import jakarta.ws.rs.client.ClientBuilder;
+import jakarta.ws.rs.client.WebTarget;
+import jakarta.ws.rs.core.UriBuilder;
 import java.net.URI;
 
+/**
+ * Micro-deployment test similar to the approach propagated by Arquillian.
+ *
+ * <p>Uses TomEE embedded with a dynamic port provided by the
+ * {@link TestApplication} configuration.</p>
+ */
 //micro-deployment similar to the approach propagated by arquillian
-@RunWith(TomEEEmbeddedSingleRunner.class)
+@RunWithTomEEEmbedded
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class DynamicTest {
+
     @Application
     private TestApplication app;
 
     private WebTarget target;
 
-    @Before
-    public void createTarget() {
+    /**
+     * Creates the JAX-RS client target using the dynamic port.
+     */
+    @BeforeEach
+    void createTarget() {
         ApplicationPath applicationPath = DemoApplication.class.getAnnotation(ApplicationPath.class);
-        URI uri = UriBuilder.fromUri("http://127.0.0.1:" + app.getPort() + "/" + TestApplication.SERVICE_ROOT + "/" + applicationPath.value() + "/").build();
+        URI uri = UriBuilder.fromUri("http://127.0.0.1:" + app.getPort()
+                + "/" + TestApplication.SERVICE_ROOT + "/" + applicationPath.value() + "/").build();
         target = ClientBuilder.newClient().target(uri);
     }
 
+    /**
+     * Verifies that the simple hello resource responds correctly.
+     */
     @Test
-    public void simpleResource() {
+    void simpleResource() {
         String responseString = target.path("hello").request().get(String.class);
-        Assert.assertEquals("Hello JAX-RS!", responseString);
+        Assertions.assertEquals("Hello JAX-RS!", responseString);
     }
 
+    /**
+     * Verifies that the CDI-aware resource responds with the injected bean value.
+     */
     @Test
-    public void cdiAwareResource() {
+    void cdiAwareResource() {
         String responseString = target.path("hello-cdi").request().get(String.class);
-        Assert.assertEquals("Hello CDI!", responseString);
+        Assertions.assertEquals("Hello CDI!", responseString);
     }
 }

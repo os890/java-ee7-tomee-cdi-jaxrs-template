@@ -17,25 +17,32 @@
  * under the License.
  */
 
-package org.os890.template.cdi;
+package org.os890.template.cdise;
 
-import jakarta.enterprise.context.ApplicationScoped;
+import org.os890.cdi.addon.dynamictestbean.EnableTestBeans;
+import org.os890.template.jaxrs.service.CdiAwareResource;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import jakarta.inject.Inject;
 
 /**
- * Application-scoped CDI bean that provides a simple value.
- *
- * <p>Demonstrates basic CDI bean definition with application scope,
- * meaning a single instance is shared across the entire application.</p>
+ * CDI SE test that verifies {@link CdiAwareResource} receives its
+ * CDI injection and produces the correct greeting.
  */
-@ApplicationScoped
-public class ApplicationScopedBean {
+@EnableTestBeans
+class CdiAwareResourceTest {
+
+    @Inject
+    private CdiAwareResource cdiAwareResource;
 
     /**
-     * Returns the value identifying this bean's technology.
-     *
-     * @return the string {@code "CDI"}
+     * Verifies that the CDI-aware resource produces the expected greeting
+     * with the injected bean value.
      */
-    public String getValue() {
-        return "CDI";
+    @Test
+    void msg() {
+        Assertions.assertNotNull(cdiAwareResource);
+        Assertions.assertEquals("Hello CDI!", cdiAwareResource.msg());
     }
 }

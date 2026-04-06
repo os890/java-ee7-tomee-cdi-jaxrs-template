@@ -16,11 +16,15 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+
 package org.os890.template.jaxrs;
 
-import javax.ws.rs.ApplicationPath;
-import javax.ws.rs.core.Application;
+import jakarta.ws.rs.ApplicationPath;
+import jakarta.ws.rs.core.Application;
 
+/**
+ * JAX-RS application configuration that maps all resources under the {@code public} path.
+ */
 @ApplicationPath("public")
 public class DemoApplication extends Application {
 }

@@ -16,19 +16,31 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+
 package org.os890.template.jaxrs.test;
 
 import org.apache.openejb.testing.Application;
 import org.apache.openejb.testing.Classes;
 
+/**
+ * TomEE test application configuration that defines the service root
+ * context and HTTP port for embedded integration tests.
+ */
 @Application
 @Classes(context = TestApplication.SERVICE_ROOT)
 public class TestApplication {
+
+    /** The context root used by the embedded TomEE server. */
     public static final String SERVICE_ROOT = "serviceRoot";
 
     //@org.apache.openejb.testing.RandomPort("http") //just compatible with the setup of DynamicTest
     private int port = 8080; //default-value not needed if @RandomPort gets used
 
+    /**
+     * Returns the HTTP port the embedded server listens on.
+     *
+     * @return the HTTP port number
+     */
     public int getPort() {
         return port;
     }

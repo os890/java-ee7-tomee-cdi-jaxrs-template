@@ -16,6 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+
 package org.os890.template.embedded;
 
 import org.apache.tomee.embedded.Configuration;
@@ -23,9 +24,22 @@ import org.apache.tomee.embedded.Container;
 
 import java.io.File;
 
+/**
+ * Starts an embedded TomEE server deploying the classpath as a web application.
+ *
+ * <p>Run this class directly to launch the JAX-RS demo on an embedded
+ * TomEE instance with the context root {@code serviceRoot}.</p>
+ */
 public class ServerStarter {
+
+    /**
+     * Entry point that boots the embedded TomEE container and waits.
+     *
+     * @param args command-line arguments (unused)
+     */
     public static void main(String[] args) {
-        try (final Container container = new Container(new Configuration()).deployClasspathAsWebApp("serviceRoot", new File("src/main/webapp"))) {
+        try (Container container = new Container(new Configuration())
+                .deployClasspathAsWebApp("serviceRoot", new File("src/main/webapp"))) {
             container.await();
         }
     }

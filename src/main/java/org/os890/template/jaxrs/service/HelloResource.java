@@ -16,13 +16,23 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+
 package org.os890.template.jaxrs.service;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.Path;
 
+/**
+ * Simple JAX-RS resource that returns a plain-text greeting.
+ */
 @Path("hello")
 public class HelloResource {
+
+    /**
+     * Returns a simple JAX-RS greeting.
+     *
+     * @return the string {@code "Hello JAX-RS!"}
+     */
     @GET
     public String msg() {
         return "Hello JAX-RS!";

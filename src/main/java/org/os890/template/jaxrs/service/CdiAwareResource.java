@@ -16,19 +16,29 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+
 package org.os890.template.jaxrs.service;
 
 import org.os890.template.cdi.ApplicationScopedBean;
 
-import javax.inject.Inject;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
+import jakarta.inject.Inject;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.Path;
 
+/**
+ * JAX-RS resource that demonstrates CDI injection inside a REST endpoint.
+ */
 @Path("hello-cdi")
 public class CdiAwareResource {
+
     @Inject
     private ApplicationScopedBean applicationScopedBean;
 
+    /**
+     * Returns a greeting that includes the value from the injected CDI bean.
+     *
+     * @return a greeting string combining "Hello" with the CDI bean value
+     */
     @GET
     public String msg() {
         return "Hello " + applicationScopedBean.getValue() + "!";

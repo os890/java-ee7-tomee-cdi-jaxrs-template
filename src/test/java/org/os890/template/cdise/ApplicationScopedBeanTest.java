@@ -17,25 +17,32 @@
  * under the License.
  */
 
-package org.os890.template.cdi;
+package org.os890.template.cdise;
 
-import jakarta.enterprise.context.ApplicationScoped;
+import org.os890.cdi.addon.dynamictestbean.EnableTestBeans;
+import org.os890.template.cdi.ApplicationScopedBean;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import jakarta.inject.Inject;
 
 /**
- * Application-scoped CDI bean that provides a simple value.
- *
- * <p>Demonstrates basic CDI bean definition with application scope,
- * meaning a single instance is shared across the entire application.</p>
+ * CDI SE test that verifies {@link ApplicationScopedBean} using the
+ * dynamic-cdi-test-bean-addon with full classpath scanning.
  */
-@ApplicationScoped
-public class ApplicationScopedBean {
+@EnableTestBeans
+class ApplicationScopedBeanTest {
+
+    @Inject
+    private ApplicationScopedBean applicationScopedBean;
 
     /**
-     * Returns the value identifying this bean's technology.
-     *
-     * @return the string {@code "CDI"}
+     * Verifies that the application-scoped bean is injected and returns
+     * the expected value.
      */
-    public String getValue() {
-        return "CDI";
+    @Test
+    void getValue() {
+        Assertions.assertNotNull(applicationScopedBean);
+        Assertions.assertEquals("CDI", applicationScopedBean.getValue());
     }
 }
